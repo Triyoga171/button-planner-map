@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Judul pada tab browser -->
+    <title>LeafletJS</title>
+
+    <!-- Leaflet CSS Library -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+
+    <!-- Style untuk tampilan peta fullscreen -->
+    <style>
+        html,
+        body,
+        #map {
+            height: 600px;
+            width: 100%;
+            margin: 0px;
+        }
+
+        #button-area {
+            width: 100%;
+            height: 200px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        button {
+            width: 100px;
+            height: 50px;
+            margin: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Leaflet JavaScript Library -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- HTML Block untuk menampilkan peta -->
+    <div id="map"></div>
+    <div id="button-area">
+        <button onclick="changemap(-0.0284958,109.3489838,13,'Pontianak','https://farm1.staticflickr.com/678/23100963901_015ebb96e3_h.jpg')">PONTIANAK</button>
+        <button onclick="changemap(0.5029614,109.7115326,13,'Landak','https://upload.wikimedia.org/wikipedia/commons/7/7f/Foto_Kantor_Bupati_Landak.jpg')">LANDAK</button>
+        <button onclick="changemap(-1.8546489,109.9669647,13,'Ketapang','https://asset.kompas.com/crops/mJiNi82y_v1Vq2QtaDAsazaWrDc=/0x0:1136x757/780x390/data/photo/2022/02/21/621386ebd1a75.jpeg')">KETAPANG</button>
+        <button onclick="changemap(0.0569916,111.4851379,13,'Sintang','https://www.celebes.co/borneo/wp-content/uploads/2020/02/Tempat-Wisata-Sintang.jpg')">SINTANG</button>
+        <button onclick="changemap(0.1259993,110.6110382,13,'Sanggau','https://www.celebes.co/borneo/wp-content/uploads/2020/01/Tempat-Wisata-Sanggau.jpg')">SANGGAU</button>
+    </div>
+    <script>
+        /* Initial Map */
+        var centermap = [-0.0236034, 109.3445206]
+        var map = L.map('map').setView(centermap, 13); //lat, long, zoom
+
+        /* Tile Basemap */
+        var basemap1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            //attribution akan muncul di pojok kanan bawah
+            attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="https://www.unsorry.net" target="_blank">unsorry@2022</a>'
+        });
+        var basemap2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        });
+        basemap2.addTo(map); //Memanggil basemap untuk ditampilkan ketika halaman dipanggil
+
+        /* Marker */
+        var marker = L.marker(centermap); //lat, long
+        marker.addTo(map); //Marker ditampilkan ketika halaman dipanggil
+        /* Popup Marker */
+        marker.bindPopup("Kota Pontianak <br>" + centermap);
+        var baseMaps = { //list basemap
+            "Open Street Map": basemap1,
+            "Esri World Imagery": basemap2,
+        };
+        var Layers = {  //list layer
+
+
+
+        };
+        var layerControl = L.control.layers(baseMaps, Layers, { collapsed: false });
+        layerControl.addTo(map);
+
+
+        // untuk mengubah peta
+        function changemap(lat, long, zoom, city, imageurl) {
+            map.flyTo([lat, long], zoom);
+
+            // untuk memindah marker
+            marker.setLatLng([lat, long])
+            marker.bindPopup("ini " + city + "<br>" + [lat, long] + "<br><img src='" + imageurl + "' width='250px'>");
+            marker.openPopup();
+        }
+
+
+
+    </script>
+</body>
+
+</html>
